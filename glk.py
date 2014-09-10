@@ -1,6 +1,6 @@
 # -*- coding: utf-8 *-*
 """A class to communicate with Matrix Orbital's GLK series LCD displays"""
-# Copyright (C) 2012 Raphaël Doursenaud <rdoursenaud@free.fr>
+# Copyright (C) 2012-2014 Raphaël Doursenaud <rdoursenaud@free.fr>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
 # Matrix Orbital
 # GLK19264-7T-1U
 # Technical Manual
-# Revision: 1.1
-# www.matrixorbital.ca/manuals/GLK_series/GLK19264-7T-1U/GLK19264-7T-1U.pdf
+# Revision: 1.2
+# http://www.matrixorbital.ca/manuals/GLK_Series/GLK_GLC_Legacy/GLK19264-7T-1U/GLK19264-7T-1U.pdf
 
 ## I2C PROTOCOL
 # START : Toggle SDA high to low
