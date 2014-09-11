@@ -57,9 +57,9 @@ class PyMoGlk:
     mode = 'serial'
 
     ##COMMUNICATION
-    _CMD_INIT = b'\xFE'
+    _CMD_INIT = int(0xFE)
     # (Must be issued before any command)
-    _CMD_FLOW_CONTROL_ON = b'\x3A'
+    _CMD_FLOW_CONTROL_ON = int(0x3A)
     #                    full[0-128]
     #                    (Number of bytes before almost full
     #                     0: full)
@@ -67,26 +67,26 @@ class PyMoGlk:
     #                    (Number of bytes before almost empty
     #                     128: empty)
 
-    _RET_ALMOST_FULL = b'\xFE'
-    _RET_ALMOST_EMPTY = b'\xFF'
+    _RET_ALMOST_FULL = int(0xFE)
+    _RET_ALMOST_EMPTY = int(0xFF)
 
-    _CMD_FLOW_CONTROL_OFF = b'\x3B'
+    _CMD_FLOW_CONTROL_OFF = int(0x3B)
 
-    _CMD_I2C_ADDRESS = b'\x33'
+    _CMD_I2C_ADDRESS = int(0x33)
 
-    _CMD_BAUD_RATE = b'\x39'
+    _CMD_BAUD_RATE = int(0x39)
     #                    speed[See table below]
 
-    _BAUD_RATE_9600 = b'\xCF'
-    _BAUD_RATE_14400 = b'\x8A'
-    _BAUD_RATE_19200 = b'\x67'
-    _BAUD_RATE_28800 = b'\x44'
-    _BAUD_RATE_38400 = b'\x33'
-    _BAUD_RATE_57600 = b'\x22'
-    _BAUD_RATE_76800 = b'\x19'
-    _BAUD_RATE_115200 = b'\x10'
+    _BAUD_RATE_9600 = int(0xCF)
+    _BAUD_RATE_14400 = int(0x8A)
+    _BAUD_RATE_19200 = int(0x67)
+    _BAUD_RATE_28800 = int(0x44)
+    _BAUD_RATE_38400 = int(0x33)
+    _BAUD_RATE_57600 = int(0x22)
+    _BAUD_RATE_76800 = int(0x19)
+    _BAUD_RATE_115200 = int(0x10)
 
-    _CMD_NON_STANDARD_BAUD_RATE = b'\xA4'
+    _CMD_NON_STANDARD_BAUD_RATE = int(0xA4)
     #                    speed[12-2047]
     #                    (2 bytes,
     #                    LSB then MSB,
@@ -117,16 +117,16 @@ class PyMoGlk:
 
     # TODO: implement font file format
 
-    _CMD_UPLOAD_FONT = b'\x24'
+    _CMD_UPLOAD_FONT = int(0x24)
     #                    fontid
     #                    lsbsize
     #                    msbsize
     #                    fontfile
     # (Don't forget to set the new font metrics,
     #  see FILESYSTEM file transfer protocol)
-    _CMD_USE_FONT = b'\x31'
+    _CMD_USE_FONT = int(0x31)
     #                    fontid
-    _CMD_FONT_METRICS = b'\x32'
+    _CMD_FONT_METRICS = int(0x32)
     #                    lm
     #                    (Left Margin: Location in pi\xels)
     #                    tm
@@ -138,40 +138,40 @@ class PyMoGlk:
     #                    srow
     #                    (Scroll Row:
     #                    Y location of last row in pi\xels)
-    _CMD_BOX_SPACE_MODE = b'\xAC'
+    _CMD_BOX_SPACE_MODE = int(0xAC)
     #                    value[0-1]
     #                    (0: Off,
     #                     1: On)
 
     ## TEXT
-    _LINE_FEED = b'\x0A'
+    _LINE_FEED = int(0x0A)
 
-    _CMD_HOME = b'\x48'
-    _CMD_CURSOR_POSITION = b'\x47'
+    _CMD_HOME = int(0x48)
+    _CMD_CURSOR_POSITION = int(0x47)
     #                    col
     #                    row
     #                    (Derived from current font base size)
-    _CMD_CURSOR_COORDINATE = b'\x79'
+    _CMD_CURSOR_COORDINATE = int(0x79)
     #                    x
     #                    y
-    _CMD_AUTO_SCROLL_ON = b'\x51'
-    _CMD_AUTO_SCROLL_OFF = b'\x52'
+    _CMD_AUTO_SCROLL_ON = int(0x51)
+    _CMD_AUTO_SCROLL_OFF = int(0x52)
 
     ## BITMAPS
     # BITMAP FILE FORMAT
     #  The bitmap is encoded into bytes horizontally
 
-    _CMD_UPLOAD_BMP = b'\x5E'
+    _CMD_UPLOAD_BMP = int(0x5E)
     #                    bitmapid
     #                    lsbsize
     #                    msbsize
     #                    bitmapfile
     # (see FILESYSTEM file transfer protocol)
-    _CMD_DRAW_MEMORY_BMP = b'\x62'
+    _CMD_DRAW_MEMORY_BMP = int(0x62)
     #                    bitmapid
     #                    x
     #                    y
-    _CMD_DRAW_BMP = b'\x64'
+    _CMD_DRAW_BMP = int(0x64)
     #                    x
     #                    y
     #                    width
@@ -179,23 +179,23 @@ class PyMoGlk:
     #                    data
 
     ## BAR GRAPHS & DRAWING
-    _CMD_DRAWING_COLOR = b'\x63'
+    _CMD_DRAWING_COLOR = int(0x63)
     #                    color[0-255]
     #                    (0:     White,
     #                     1-255: Black)
-    _CMD_DRAW_PIXEL = b'\x70'
+    _CMD_DRAW_PIXEL = int(0x70)
     #                    x
     #                    y
-    _CMD_DRAW_LINE = b'\x6C'
+    _CMD_DRAW_LINE = int(0x6C)
     #                    x1
     #                    y1
     #                    x2
     #                    y2
     # (Lines may interpolate differently Left to Right and Right to Left)
-    _CMD_CONTINUE_LINE = b'\x65'
+    _CMD_CONTINUE_LINE = int(0x65)
     #                    x
     #                    y
-    _CMD_DRAW_RECTANGLE = b'\x72'
+    _CMD_DRAW_RECTANGLE = int(0x72)
     #                    color[0-255]
     #                    (0:     White,
     #                     1-255: Black)
@@ -203,7 +203,7 @@ class PyMoGlk:
     #                    y1
     #                    x2
     #                    y2
-    _CMD_DRAW_SOLID_RECTANGLE = b'\x78'
+    _CMD_DRAW_SOLID_RECTANGLE = int(0x78)
     #                    color[0-255]
     #                    (0:     White,
     #                     1-255: Black)
@@ -211,7 +211,7 @@ class PyMoGlk:
     #                    y1
     #                    x2
     #                    y2
-    _CMD_INITIALIZE_BAR_GRAPH = b'\x67'
+    _CMD_INITIALIZE_BAR_GRAPH = int(0x67)
     #                    bgid[0-15]
     #                    type[0-3]
     #                    (0: Vertical from bottom,
@@ -225,11 +225,11 @@ class PyMoGlk:
     #                    y2
     #                    (y1<y2)
     # (Beware of overlapping bar graphs)
-    _CMD_DRAW_BAR_GRAPH = b'\x69'
+    _CMD_DRAW_BAR_GRAPH = int(0x69)
     #                    bgid[0-15]
     #                    value
     #                    (In pi\xels)
-    _CMD_INITIALIZE_STRIP_CHART = b'\x6A'
+    _CMD_INITIALIZE_STRIP_CHART = int(0x6A)
     #                    scid[0-6]
     #                    x1
     #                    y1
@@ -237,7 +237,7 @@ class PyMoGlk:
     #                    (x1<x2)
     #                    y2
     #                    (y1<y2)
-    _CMD_SHIFT_STRIP_CHART = b'\x6B'
+    _CMD_SHIFT_STRIP_CHART = int(0x6B)
     #                    ref
     #                    (LSB: scid,
     #                     MSB: direction
@@ -255,11 +255,11 @@ class PyMoGlk:
     #    Red             1   0
     #    Off             1   1
 
-    _CMD_GPO_OFF = b'\x56'
+    _CMD_GPO_OFF = int(0x56)
     #                    num[1-6]
-    _CMD_GPO_ON = b'\x57'
+    _CMD_GPO_ON = int(0x57)
     #                    num[1-6]
-    _CMD_STARTUP_GPO_STATE = b'\xC3'
+    _CMD_STARTUP_GPO_STATE = int(0xC3)
     #                    num[1-6]
     #                    state[0-1]
     #                    (0: Off,
@@ -268,40 +268,40 @@ class PyMoGlk:
 
     ## KEYPAD
     # Default layout:
-    _RET_UP = b'\x42'
-    _RET_DOWN = b'\x48'
-    _RET_LEFT = b'\x44'
-    _RET_RIGHT = b'\x43'
-    _RET_CENTER = b'\x45'
-    _RET_TOP = b'\x41'
-    _RET_BOTTOM = b'\x47'
-    _RET_RELEASE_UP = b'\x62'
-    _RET_RELEASE_DOWN = b'\x68'
-    _RET_RELEASE_LEFT = b'\x64'
-    _RET_RELEASE_RIGHT = b'\x63'
-    _RET_RELEASE_CENTER = b'\x65'
-    _RET_RELEASE_TOP = b'\x61'
-    _RET_RELEASE_BOTTOM = b'\x67'
+    _RET_UP = int(0x42)
+    _RET_DOWN = int(0x48)
+    _RET_LEFT = int(0x44)
+    _RET_RIGHT = int(0x43)
+    _RET_CENTER = int(0x45)
+    _RET_TOP = int(0x41)
+    _RET_BOTTOM = int(0x47)
+    _RET_RELEASE_UP = int(0x62)
+    _RET_RELEASE_DOWN = int(0x68)
+    _RET_RELEASE_LEFT = int(0x64)
+    _RET_RELEASE_RIGHT = int(0x63)
+    _RET_RELEASE_CENTER = int(0x65)
+    _RET_RELEASE_TOP = int(0x61)
+    _RET_RELEASE_BOTTOM = int(0x67)
 
-    _CMD_AUTO_TRANSMIT_KEY_ON = b'\x41'
-    _CMD_AUTO_TRANSMIT_KEY_OFF = b'\x4F'
+    _CMD_AUTO_TRANSMIT_KEY_ON = int(0x41)
+    _CMD_AUTO_TRANSMIT_KEY_OFF = int(0x4F)
     # (The keypad buffer is reset after 10 key presses)
-    _CMD_POLL_KEY = b'\x26'
+    _CMD_POLL_KEY = int(0x26)
     # (Returned code MSB flags 'more than one key press in buffer')
 
-    _RET_NO_KEY = b'\x00'
+    _RET_NO_KEY = int(0x00)
 
-    _CMD_CLEAR_KEY_BUFFER = b'\x45'
-    _CMD_DEBOUNCE_TIME = b'\x55'
+    _CMD_CLEAR_KEY_BUFFER = int(0x45)
+    _CMD_DEBOUNCE_TIME = int(0x55)
     #                    time[0-255]
     #                    (6.554ms increments,
     #                     Default: 8)
-    _CMD_AUTO_REPEAT_MODE = b'\x7E'
+    _CMD_AUTO_REPEAT_MODE = int(0x7E)
     #                    mode[0-1]
     #                    (0: Resend Key,
     #                     1: Key Up/Down)
-    _CMD_AUTO_REPEAT_OFF = b'\x60'
-    _CMD_CUSTOM_KEYPAD_CODES = b'\xD5'
+    _CMD_AUTO_REPEAT_OFF = int(0x60)
+    _CMD_CUSTOM_KEYPAD_CODES = int(0xD5)
     #                    kdown[See table bellow]
     #                    (9 bytes)
     #                    kup[See table bellow]
@@ -320,20 +320,20 @@ class PyMoGlk:
     # FI\XME: Report it missing from codes list
 
     ## DISPLAY
-    _CMD_CLEAR_SCREEN = b'\x58'
-    _CMD_DISPLAY_ON = b'\x42'
+    _CMD_CLEAR_SCREEN = int(0x58)
+    _CMD_DISPLAY_ON = int(0x42)
     #                    min[0-90]
-    _CMD_DISPLAY_OFF = b'\x46'
-    _CMD_BRIGHTNESS = b'\x99'
+    _CMD_DISPLAY_OFF = int(0x46)
+    _CMD_BRIGHTNESS = int(0x99)
     #                    brightness[0-255]
     #                    (Default: 255)
-    _CMD_DEFAULT_BRIGHTNESS = b'\x98'
+    _CMD_DEFAULT_BRIGHTNESS = int(0x98)
     #                    brightness[0-255]
     #                    (Default: 255)
-    _CMD_CONTRAST = b'\x50'
+    _CMD_CONTRAST = int(0x50)
     #                    contrast[0-255]
     #                    (Default: 128)
-    _CMD_DEFAULT_CONTRAST = b'\x91'
+    _CMD_DEFAULT_CONTRAST = int(0x91)
     #                    contrast[0-255]
     #                    (Default: 128)
 
@@ -353,25 +353,25 @@ class PyMoGlk:
 
     # TODO: Implement file transfer protocol
 
-    _RET_CONFIRM = b'\x01'
-    _RET_DECLINE = b'\x08'
+    _RET_CONFIRM = int(0x01)
+    _RET_DECLINE = int(0x08)
 
-    _CMD_CONFIRM = b'\x01'
-    _CMD_DECLINE = b'\x08'
+    _CMD_CONFIRM = int(0x01)
+    _CMD_DECLINE = int(0x08)
 
-    _CMD_WIPE_FILESYSTEM = b'\x21', b'\x59', b'\x21'
+    _CMD_WIPE_FILESYSTEM = int(0x21), int(0x59), int(0x21)
     # (Be carefull with this one!)
-    _CMD_DELETE_FILE = b'\xAD'
+    _CMD_DELETE_FILE = int(0xAD)
     #                    type[0-1]
     #                    (0: Font,
     #                     1: Bitmap)
     #                     fontid or bitmapid
-    _CMD_FREE_SPACE = b'\xAF'
+    _CMD_FREE_SPACE = int(0xAF)
 
     # FREE SPACE RETURN FORMAT
     # Free space size (4 bytes LSB to MSB)
 
-    _CMD_DIRECTORY = b'\xB3'
+    _CMD_DIRECTORY = int(0xB3)
 
     # DIRECTORY RETURN FORMAT
     #  Header (1 byte)
@@ -379,23 +379,23 @@ class PyMoGlk:
     #    Number of entries (1 byte)
     #  File Entry (4 bytes)
     #    Flag (1 byte)
-    #    (b'\x00': Not used)
+    #    (int(0x00): Not used)
     #    FileID/Type (1 byte)
     #    (1st bit: File Type
     #    Next seven bits: FileID)
     #    File size LSB (1 byte)
     #    File size MSB (1 byte)
 
-    _CMD_UPLOAD_FS = b'\xB0'
+    _CMD_UPLOAD_FS = int(0xB0)
     #                    fsimagefile
     #                    (Must be 16KB)
-    _CMD_DOWNLOAD_FILE = b'\xB2'
+    _CMD_DOWNLOAD_FILE = int(0xB2)
     #                    type[0-1]
     #                    (0: Font,
     #                     1: Bitmap)
     #                    fontid or bitmapid
 
-    _CMD_MOVE_FILE = b'\xB4'
+    _CMD_MOVE_FILE = int(0xB4)
     #                    oldtype[0-1]
     #                    (0: Font,
     #                     1: Bitmap)
@@ -404,7 +404,7 @@ class PyMoGlk:
     #                    (0: Font,
     #                     1: Bitmap)
     #                    newid
-    _CMD_DUMP_FS = b'\x30'
+    _CMD_DUMP_FS = int(0x30)
 
     #  DOWNLOAD_FILE AND DUMP_FS RETURN FORMAT
     #  File size (4 bytes)
@@ -412,14 +412,14 @@ class PyMoGlk:
     #  File Data
 
     # Undocumented command! Seems to dump the settings.
-    _CMD_DUMP_SETTINGS = b'\xD0'
+    _CMD_DUMP_SETTINGS = int(0xD0)
 
     ## SECURITY
-    _CMD_REMEMBER = b'\x93'
+    _CMD_REMEMBER = int(0x93)
     #                    value[0-1]
     #                    (0: Do not remember,
     #                     1: Remember)
-    _CMD_LOCK_LEVEL = b'\xCA', b'\xF5', b'\xA0'
+    _CMD_LOCK_LEVEL = int(0xCA), int(0xF5), int(0xA0)
     #                    level
     #                    (Lock bits:
     #                     0-2:  Reserved leave 0,
@@ -428,7 +428,7 @@ class PyMoGlk:
     #                     5:    Filesystem,
     #                     6:    Command,
     #                     7:    Display)
-    _CMD_DEFAULT_LOCK_LEVEL = b'\xCB', b'\xF5', b'\xA0'
+    _CMD_DEFAULT_LOCK_LEVEL = int(0xCB), int(0xF5), int(0xA0)
     #                    level
     #                    (Lock bits:
     #                     0-2:  Reserved leave 0,
@@ -439,98 +439,98 @@ class PyMoGlk:
     #                     7:    Display)
 
     # FI\XME: Report it missing from codes list
-    _CMD_WRITE_CUSTOMER_DATA = b'\x34'
+    _CMD_WRITE_CUSTOMER_DATA = int(0x34)
     #                    data
     #                    (16B are accessible)
-    _CMD_READ_CUSTOMER_DATA = b'\x35'
+    _CMD_READ_CUSTOMER_DATA = int(0x35)
 
     #  READ_CUSTOMER_DATA RETURN FORMAT
     #  Data (16 bytes)
 
     ## MISC
-    _CMD_VERSION_NUMBER = b'\x36'
+    _CMD_VERSION_NUMBER = int(0x36)
 
     #  VERSION_NUMBER RETURN FORMAT
     #  Version (1 byte)
     #  (Represents the version number
     #   Hex  Version
-    #   b'\x19'  1.9
-    #   b'\x57'  5.7)
+    #   int(0x19)  1.9
+    #   int(0x57)  5.7)
 
-    _CMD_MODULE_TYPE = b'\x37'
+    _CMD_MODULE_TYPE = int(0x37)
 
     #  MODULE_TYPE RETURN FORMAT
     #  Type (1 byte)
     #  (One of the following return codes)
-    _RET_LCD0821 = b'\x01'
-    _RET_LCD2021 = b'\x02'
-    _RET_LCD2041 = b'\x05'
-    _RET_LCD4021 = b'\x06'
-    _RET_LCD4041 = b'\x07'
-    _RET_LK202_25 = b'\x08'
-    _RET_LK204_25 = b'\x09'
-    _RET_LK404_55 = b'\x0A'
-    _RET_VFD2021 = b'\x0B'
-    _RET_VFD2041 = b'\x0C'
-    _RET_VFD4021 = b'\x0D'
-    _RET_VK202_25 = b'\x0E'
-    _RET_VK204_25 = b'\x0F'
-    _RET_GLC12232 = b'\x10'
-    _RET_GLC24064 = b'\x13'
-    _RET_GLK24064_25 = b'\x15'
-    _RET_GLK12232_25 = b'\x22'
-    _RET_GLK12232_25_SM = b'\x24'
-    _RET_GLK24064_16_1U_USB = b'\x25'
-    _RET_GLK24064_16_1U = b'\x26'
-    _RET_GLK19264_7T_1U_USB = b'\x27'
-    _RET_GLK12236_16 = b'\x28'
-    _RET_GLK12232_16_SM = b'\x29'
-    _RET_GLK19264_7T_1U = b'\x2A'
-    _RET_LK204_7T_1U = b'\x2B'
-    _RET_LK204_7T_1U_USB = b'\x2C'
-    _RET_LK404_AT = b'\x31'
-    _RET_MOS_AV_162A = b'\x32'
-    _RET_LK402_12 = b'\x33'
-    _RET_LK162_12 = b'\x34'
-    _RET_LK204_25PC = b'\x35'
-    _RET_LK202_24_USB = b'\x36'
-    _RET_VK202_24_USB = b'\x37'
-    _RET_LK204_24_USB = b'\x38'
-    _RET_VK204_24_USB = b'\x39'
-    _RET_PK162_12 = b'\x3A'
-    _RET_VK162_12 = b'\x3B'
-    _RET_MOS_AP_162A = b'\x3C'
-    _RET_PK202_25 = b'\x3D'
-    _RET_MOS_AL_162A = b'\x3E'
-    _RET_MOS_AL_202A = b'\x3F'
-    _RET_MOS_AV_202A = b'\x40'
-    _RET_MOS_AP_202A = b'\x41'
-    _RET_PK202_24_USB = b'\x42'
-    _RET_MOS_AL_082 = b'\x43'
-    _RET_MOS_AL_204 = b'\x44'
-    _RET_MOS_AV_204 = b'\x45'
-    _RET_MOS_AL_402 = b'\x46'
-    _RET_MOS_AV_402 = b'\x47'
-    _RET_LK082_12 = b'\x48'
-    _RET_VK402_12 = b'\x49'
-    _RET_VK404_55 = b'\x4A'
-    _RET_LK402_25 = b'\x4B'
-    _RET_VK402_25 = b'\x4C'
-    _RET_PK204_25 = b'\x4D'
-    _RET_MOS = b'\x4F'
-    _RET_MOI = b'\x50'
-    _RET_XBOARD_S = b'\x51'
-    _RET_XBOARD_I = b'\x52'
-    _RET_MOU = b'\x53'
-    _RET_XBOARD_U = b'\x54'
-    _RET_LK202_25_USB = b'\x55'
-    _RET_VK202_25_USB = b'\x56'
-    _RET_LK204_25_USB = b'\x57'
-    _RET_VK204_25_USB = b'\x58'
-    _RET_LK162_12_TC = b'\x5B'
-    _RET_GLK240128_25 = b'\x72'
-    _RET_LK404_25 = b'\x73'
-    _RET_VK404_25 = b'\x74'
+    _RET_LCD0821 = int(0x01)
+    _RET_LCD2021 = int(0x02)
+    _RET_LCD2041 = int(0x05)
+    _RET_LCD4021 = int(0x06)
+    _RET_LCD4041 = int(0x07)
+    _RET_LK202_25 = int(0x08)
+    _RET_LK204_25 = int(0x09)
+    _RET_LK404_55 = int(0x0A)
+    _RET_VFD2021 = int(0x0B)
+    _RET_VFD2041 = int(0x0C)
+    _RET_VFD4021 = int(0x0D)
+    _RET_VK202_25 = int(0x0E)
+    _RET_VK204_25 = int(0x0F)
+    _RET_GLC12232 = int(0x10)
+    _RET_GLC24064 = int(0x13)
+    _RET_GLK24064_25 = int(0x15)
+    _RET_GLK12232_25 = int(0x22)
+    _RET_GLK12232_25_SM = int(0x24)
+    _RET_GLK24064_16_1U_USB = int(0x25)
+    _RET_GLK24064_16_1U = int(0x26)
+    _RET_GLK19264_7T_1U_USB = int(0x27)
+    _RET_GLK12236_16 = int(0x28)
+    _RET_GLK12232_16_SM = int(0x29)
+    _RET_GLK19264_7T_1U = int(0x2A)
+    _RET_LK204_7T_1U = int(0x2B)
+    _RET_LK204_7T_1U_USB = int(0x2C)
+    _RET_LK404_AT = int(0x31)
+    _RET_MOS_AV_162A = int(0x32)
+    _RET_LK402_12 = int(0x33)
+    _RET_LK162_12 = int(0x34)
+    _RET_LK204_25PC = int(0x35)
+    _RET_LK202_24_USB = int(0x36)
+    _RET_VK202_24_USB = int(0x37)
+    _RET_LK204_24_USB = int(0x38)
+    _RET_VK204_24_USB = int(0x39)
+    _RET_PK162_12 = int(0x3A)
+    _RET_VK162_12 = int(0x3B)
+    _RET_MOS_AP_162A = int(0x3C)
+    _RET_PK202_25 = int(0x3D)
+    _RET_MOS_AL_162A = int(0x3E)
+    _RET_MOS_AL_202A = int(0x3F)
+    _RET_MOS_AV_202A = int(0x40)
+    _RET_MOS_AP_202A = int(0x41)
+    _RET_PK202_24_USB = int(0x42)
+    _RET_MOS_AL_082 = int(0x43)
+    _RET_MOS_AL_204 = int(0x44)
+    _RET_MOS_AV_204 = int(0x45)
+    _RET_MOS_AL_402 = int(0x46)
+    _RET_MOS_AV_402 = int(0x47)
+    _RET_LK082_12 = int(0x48)
+    _RET_VK402_12 = int(0x49)
+    _RET_VK404_55 = int(0x4A)
+    _RET_LK402_25 = int(0x4B)
+    _RET_VK402_25 = int(0x4C)
+    _RET_PK204_25 = int(0x4D)
+    _RET_MOS = int(0x4F)
+    _RET_MOI = int(0x50)
+    _RET_XBOARD_S = int(0x51)
+    _RET_XBOARD_I = int(0x52)
+    _RET_MOU = int(0x53)
+    _RET_XBOARD_U = int(0x54)
+    _RET_LK202_25_USB = int(0x55)
+    _RET_VK202_25_USB = int(0x56)
+    _RET_LK204_25_USB = int(0x57)
+    _RET_VK204_25_USB = int(0x58)
+    _RET_LK162_12_TC = int(0x5B)
+    _RET_GLK240128_25 = int(0x72)
+    _RET_LK404_25 = int(0x73)
+    _RET_VK404_25 = int(0x74)
 
     def __init__(self, serialport='/dev/ttyUSB0', baudrate=19200, timeout=5):
         self.port = serial.Serial(serialport, baudrate=baudrate, timeout=timeout)
@@ -548,7 +548,7 @@ class PyMoGlk:
 
     def send(self, message):
         if self._DEBUG:
-            print("DEBUG: send(" + hexlify(message) + ")")
+            print("DEBUG: send(" + str(hexlify(message)) + ")")
         self.port.write(message)
 
     def read(self, size=1):
