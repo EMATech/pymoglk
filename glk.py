@@ -28,8 +28,6 @@
 # Information : '\x48' '\x45' '\x4C' '\x4C' '\x4F'
 # STOP : Toggle SDA low to high
 
-# TODO: I2C implementation and unavailable commands in this mode
-
 ##COMMANDS AND RETURN CODES
 # Format :
 #    Command1/Return1    Code in HEX format
@@ -53,8 +51,6 @@ import struct
 
 class PyMoGlk:
     _DEBUG = True
-
-    mode = 'serial'
 
     ##COMMUNICATION
     _CMD_INIT = int(0xFE)
@@ -533,6 +529,8 @@ class PyMoGlk:
     _RET_VK404_25 = int(0x74)
 
     def __init__(self, serialport='/dev/ttyUSB0', baudrate=19200, timeout=5):
+        # TODO: I2C communication
+        self.mode = 'serial'
         self.port = serial.Serial(serialport, baudrate=baudrate, timeout=timeout)
         if self._DEBUG:
             print("DEBUG: port parameters")
@@ -609,6 +607,10 @@ class PyMoGlk:
 
     #5.2
     def upload_font(self, ref, data):
+        # TODO: declare custom exceptions
+        if self.mode == 'i2c':
+            # FIXME: Should be a warning
+            raise Exception
         return NotImplemented
 
     #5.3
@@ -663,6 +665,10 @@ class PyMoGlk:
 
     #7.2
     def upload_bitmap(self, ref, data):
+        # TODO: declare custom exceptions
+        if self.mode == 'i2c':
+            # FIXME: Should be a warning
+            raise Exception
         return NotImplemented
 
     #7.3
@@ -673,6 +679,10 @@ class PyMoGlk:
 
     #7.4
     def draw_bitmap(self, w, h, data, x=0, y=0):
+        # TODO: declare custom exceptions
+        if self.mode == 'i2c':
+            # FIXME: Should be a warning
+            raise Exception
         # TODO: check data is ok from w and h
         raise NotImplementedError
         msg = bytearray([self._CMD_INIT, self._CMD_DRAW_BMP, x, y, w, h, data])
