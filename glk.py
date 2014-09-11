@@ -527,6 +527,9 @@ class PyMoGlk:
     _RET_GLK240128_25 = int(0x72)
     _RET_LK404_25 = int(0x73)
     _RET_VK404_25 = int(0x74)
+    _RET_GLT320240 = int(0x78)
+    _RET_GLT480282 = int(0x79)
+    _RET_GLT240128 = int(0x7A)
 
     def __init__(self, serialport='/dev/ttyUSB0', baudrate=19200, timeout=5):
         # TODO: I2C communication
