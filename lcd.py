@@ -61,6 +61,7 @@ lcd.clearscreen()
 lcd.set_backlight(True)
 
 print(lcd.read_type())
+print(lcd.read_version())
 
 #tricolor_light()
 #blink_green()
@@ -74,6 +75,6 @@ print(lcd.read_type())
 #    time.sleep(1)
 #    lcd.set_gpo(i, False)
 
-#print(lcd.read_version())
+
 #lcd.disable_key_autotransmit()
 #print(lcd.poll_keypress())
