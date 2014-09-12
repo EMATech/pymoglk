@@ -529,6 +529,10 @@ class PyMoGlk:
     _RET_GLT480282 = int(0x79)
     _RET_GLT240128 = int(0x7A)
 
+    name = ''
+    hsize = 0
+    vsize = 0
+
     def __init__(self, serialport='/dev/ttyUSB0', baudrate=19200, timeout=5, _debug=False):
         self._DEBUG = _debug
         # TODO: I2C communication
@@ -1002,7 +1006,271 @@ class PyMoGlk:
         return version
 
     #14.3
-    def read_type(self):
+    def read_type(self, parse=True):
         msg = bytearray([self._CMD_INIT, self._CMD_MODULE_TYPE])
         self.send(msg)
-        return self.read()
+        lcdtype = self.read()
+        if parse:
+            return self._parse_type(lcdtype)
+        else:
+            return lcdtype
+
+    def _parse_type(self, type):
+        lcdinfos = {
+            self._RET_LCD0821: {
+                'name': 'LCD0821',
+            },
+            self._RET_LCD2021: {
+                'name': 'LCD2021',
+            },
+            self._RET_LCD2041: {
+                'name': 'LCD2041',
+            },
+            self._RET_LCD4021: {
+                'name': 'LCD4021',
+            },
+            self._RET_LCD4041: {
+                'name': 'LCD4041',
+            },
+            self._RET_LK202_25: {
+                'name': 'LK202-25',
+            },
+            self._RET_LK204_25: {
+                'name': 'LK204-25',
+            },
+            self._RET_LK404_55: {
+                'name': 'LK404-55',
+            },
+            self._RET_VFD2021: {
+                'name': 'VFD2021',
+            },
+            self._RET_VFD2041: {
+                'name': 'VFD2041',
+            },
+            self._RET_VFD4021: {
+                'name': 'VFD4021',
+            },
+            self._RET_VK202_25: {
+                'name': 'VK202-25',
+            },
+            self._RET_VK204_25: {
+                'name': 'VK204-25',
+            },
+            self._RET_GLC12232: {
+                'name': 'GLC12232',
+                'hsize': 122,
+                'vsize': 32,
+            },
+            self._RET_GLC24064: {
+                'name': 'GLC24064',
+                'hsize': 240,
+                'vsize': 64,
+            },
+            self._RET_GLK24064_25: {
+                'name': 'GLK24064-25',
+                'hsize': 240,
+                'vsize': 64,
+            },
+            self._RET_GLK12232_25: {
+                'name': 'GLK12232-25',
+                'hsize': 122,
+                'vsize': 32,
+            },
+            self._RET_GLK12232_25_SM: {
+                'name': 'GLK12232-25-SM',
+                'hsize': 122,
+                'vsize': 32,
+            },
+            self._RET_GLK24064_16_1U_USB: {
+                'name': 'GLK24064-16-1U-USB',
+                'hsize': 240,
+                'vsize': 64,
+            },
+            self._RET_GLK24064_16_1U: {
+                'name': 'GLK24064-16-1U',
+                'hsize': 240,
+                'vsize': 64,
+            },
+            self._RET_GLK19264_7T_1U_USB: {
+                'name': 'GLK19264-7T-1U-USB',
+                'hsize': 192,
+                'vsize': 64,
+            },
+            self._RET_GLK12236_16: {
+                'name': 'GLK12236-16',
+                'hsize': 122,
+                'vsize': 36,
+            },
+            self._RET_GLK12232_16_SM: {
+                'name': 'GLK12236-16-SM',
+                'hsize': 122,
+                'vsize': 36,
+            },
+            self._RET_GLK19264_7T_1U: {
+                'name': 'GLK19264-7T-1U',
+                'hsize': 192,
+                'vsize': 64,
+            },
+            self._RET_LK204_7T_1U: {
+                'name': 'LK204-7T-1U',
+            },
+            self._RET_LK204_7T_1U_USB: {
+                'name': 'LK204-7T-1U-USB',
+            },
+            self._RET_LK404_AT: {
+                'name': 'LK404-AT',
+            },
+            self._RET_MOS_AV_162A: {
+                'name': 'MOS-AV-162A',
+            },
+            self._RET_LK402_12: {
+                'name': 'LK402-12',
+            },
+            self._RET_LK162_12: {
+                'name': 'LK162-12',
+            },
+            self._RET_LK204_25PC: {
+                'name': 'LK204-25PC',
+            },
+            self._RET_LK202_24_USB: {
+                'name': 'LK202-24-USB',
+            },
+            self._RET_VK202_24_USB: {
+                'name': 'VK202-24-USB',
+            },
+            self._RET_LK204_24_USB: {
+                'name': 'LK204-24-USB',
+            },
+            self._RET_VK204_24_USB: {
+                'name': 'VK204-24-USB',
+            },
+            self._RET_PK162_12: {
+                'name': 'PK162-12',
+            },
+            self._RET_VK162_12: {
+                'name': 'VK162-12',
+            },
+            self._RET_MOS_AP_162A: {
+                'name': 'MOS-AP-162A',
+            },
+            self._RET_PK202_25: {
+                'name': 'PK202-25',
+            },
+            self._RET_MOS_AL_162A: {
+                'name': 'MOS-AL-162A',
+            },
+            self._RET_MOS_AL_202A: {
+                'name': 'MOS-AL-202A',
+            },
+            self._RET_MOS_AV_202A: {
+                'name': 'MOS-AV-202A',
+            },
+            self._RET_MOS_AP_202A: {
+                'name': 'MOS-AP-202A',
+            },
+            self._RET_PK202_24_USB: {
+                'name': 'PK202-24-USB',
+            },
+            self._RET_MOS_AL_082: {
+                'name': 'MOS-AL-082',
+            },
+            self._RET_MOS_AL_204: {
+                'name': 'MOS-AL-204',
+            },
+            self._RET_MOS_AV_204: {
+                'name': 'MOS-AV-204',
+            },
+            self._RET_MOS_AL_402: {
+                'name': 'MOS-AL-402',
+            },
+            self._RET_MOS_AV_402: {
+                'name': 'MOS-AV-402',
+            },
+            self._RET_LK082_12: {
+                'name': 'LK082-12',
+            },
+            self._RET_VK402_12: {
+                'name': 'VK402-12',
+            },
+            self._RET_VK404_55: {
+                'name': 'VK404-55',
+            },
+            self._RET_LK402_25: {
+                'name': 'LK402-25',
+            },
+            self._RET_VK402_25: {
+                'name': 'VK402-25',
+            },
+            self._RET_PK204_25: {
+                'name': 'PK204-25',
+            },
+            self._RET_MOS: {
+                'name': 'MOS',
+            },
+            self._RET_MOI: {
+                'name': 'MOI',
+            },
+            self._RET_XBOARD_S: {
+                'name': 'XBOARD-S',
+            },
+            self._RET_XBOARD_I: {
+                'name': 'XBOARD-I',
+            },
+            self._RET_MOU: {
+                'name': 'MOU',
+            },
+            self._RET_XBOARD_U: {
+                'name': 'XBOARD-U',
+            },
+            self._RET_LK202_25_USB: {
+                'name': 'LK202-25-USB',
+            },
+            self._RET_VK202_25_USB: {
+                'name': 'VK202-25-USB',
+            },
+            self._RET_LK204_25_USB: {
+                'name': 'LK204-25-USB',
+            },
+            self._RET_VK204_25_USB: {
+                'name': 'VK204-25-USB',
+            },
+            self._RET_LK162_12_TC: {
+                'name': 'LK162-12-TC',
+            },
+            self._RET_GLK240128_25: {
+                'name': 'GLK240128-25',
+                'hsize': 240,
+                'vsize': 128,
+            },
+            self._RET_LK404_25: {
+                'name': 'LK404-25',
+            },
+            self._RET_VK404_25: {
+                'name': 'VK404-25',
+            },
+            self._RET_GLT320240: {
+                'name': 'GLT320240',
+                'hsize': 320,
+                'vsize': 240,
+            },
+            self._RET_GLT480282: {
+                'name': 'GLT480282',
+                'hsize': 480,
+                'vsize': 282,
+            },
+            self._RET_GLT240128: {
+                'name': 'GLT240128',
+                'hsize': 240,
+                'vsize': 128,
+            },
+        }.get(int.from_bytes(type, 'big'))
+
+        if self._DEBUG:
+            print("DEBUG: type infos")
+            print(lcdinfos)
+
+        self.name = lcdinfos['name']
+        self.hsize = lcdinfos['hsize']
+        self.vsize = lcdinfos['vsize']
+
+        return self.name
