@@ -934,7 +934,7 @@ class PyMoGlk:
     def get_fs_space(self):
         msg = bytearray([self._CMD_INIT, self._CMD_FREE_SPACE])
         self.send(msg)
-        return self.read()
+        return self.read(4)
 
     #12.5
     def get_fs_dir(self):
@@ -954,7 +954,7 @@ class PyMoGlk:
             raise Exception
         msg = bytearray([self._CMD_INIT, self._CMD_DOWNLOAD_FILE, type, ref])
         self.send(msg)
-        return self.read()
+        return self.read(4)
 
     #12.8
     def move_file(self, oldtype, oldref, newtype, newref):
@@ -983,7 +983,7 @@ class PyMoGlk:
     def dump_fs(self):
         msg = bytearray([self._CMD_INIT, self._CMD_DUMP_FS])
         self.send(msg)
-        return self.read()
+        return self.read(4)
 
     #13.6
     def write_customerdata(self, data):
@@ -994,7 +994,7 @@ class PyMoGlk:
     def read_customerdata(self):
         msg = bytearray([self._CMD_INIT, self._CMD_READ_CUSTOMER_DATA])
         self.send(msg)
-        return self.read()
+        return self.read(16)
 
     #14.2
     def read_version(self, parse=True):
