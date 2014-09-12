@@ -997,12 +997,13 @@ class PyMoGlk:
     def read_version(self):
         msg = bytearray([self._CMD_INIT, self._CMD_VERSION_NUMBER])
         self.send(msg)
-        return self.read()
+        version = self.read()
+        version = version.encode('hex')
+        # FIXME: add a dot between digits
+        return version
 
     #14.3
     def read_type(self):
         msg = bytearray([self._CMD_INIT, self._CMD_MODULE_TYPE])
         self.send(msg)
-        version = self.read()
-        version = version.encode('hex')
-        return version
+        return self.read()
