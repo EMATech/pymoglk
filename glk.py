@@ -555,7 +555,7 @@ class PyMoGlk:
     def read(self, size=1):
         data = self.port.read(size=size)
         if self._DEBUG:
-            print("DEBUG: read(" + str(size) + ") = " + hexlify(data) + "")
+            print("DEBUG: read(" + str(size) + ") = " + str(hexlify(data)) + "")
         return data
 
     # 4.2
