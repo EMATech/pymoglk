@@ -58,11 +58,15 @@ def sinwave():
 lcd = glk.PyMoGlk()
 lcd.clearscreen()
 lcd.set_backlight(True)
+
+print(lcd.read_type())
+
 #tricolor_light()
 #blink_green()
 
-sixteen_bargraph()
-sinwave()
+#sixteen_bargraph()
+#sinwave()
+
 #for i in range(1, 6):
 #    lcd.set_gpo(i, True)
 #    lcd.set_gpo(i+1, False)
