@@ -50,8 +50,6 @@ from binascii import hexlify
 import struct
 
 class PyMoGlk:
-    _DEBUG = True
-
     ##COMMUNICATION
     _CMD_INIT = int(0xFE)
     # (Must be issued before any command)
@@ -531,7 +529,8 @@ class PyMoGlk:
     _RET_GLT480282 = int(0x79)
     _RET_GLT240128 = int(0x7A)
 
-    def __init__(self, serialport='/dev/ttyUSB0', baudrate=19200, timeout=5):
+    def __init__(self, serialport='/dev/ttyUSB0', baudrate=19200, timeout=5, _debug=False):
+        self._DEBUG = _debug
         # TODO: I2C communication
         self.mode = 'serial'
         self.port = serial.Serial(serialport, baudrate=baudrate, timeout=timeout)

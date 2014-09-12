@@ -55,7 +55,8 @@ def sinwave():
             num = 1
 
 
-lcd = glk.PyMoGlk()
+lcd = glk.PyMoGlk(_debug=True)
+
 lcd.clearscreen()
 lcd.set_backlight(True)
 
