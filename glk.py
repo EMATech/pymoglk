@@ -49,6 +49,7 @@ import serial
 from binascii import hexlify
 import struct
 
+
 class PyMoGlk:
     ##COMMUNICATION
     _CMD_INIT = int(0xFE)
@@ -738,17 +739,17 @@ class PyMoGlk:
         self.send(msg)
 
     #8.8
-    def init_bargraph(self, ref, type, x1, y1, x2, y2):
+    def init_bargraph(self, ref, nature, x1, y1, x2, y2):
         # TODO: declare custom exceptions
         if not 0 <= ref <= 15:
             raise Exception
-        if not 0 <= type <= 3:
+        if not 0 <= nature <= 3:
             raise Exception
         if x1 > x2:
             raise Exception
         if y1 > y2:
             raise Exception
-        msg = bytearray([self._CMD_INIT, self._CMD_INITIALIZE_BAR_GRAPH, ref, type, x1, y1, x2, y2])
+        msg = bytearray([self._CMD_INIT, self._CMD_INITIALIZE_BAR_GRAPH, ref, nature, x1, y1, x2, y2])
         self.send(msg)
 
     #8.9
@@ -768,9 +769,10 @@ class PyMoGlk:
         self.send(msg)
 
     #8.11
-    def shift_stripchart(self, ref, dir):
+    def shift_stripchart(self, ref, direction):
         return NotImplemented
-        msg = bytearray([self._CMD_INIT, self._CMD_SHIFT_STRIP_CHART, ref])
+        #TODO: combine ref and direction respectively as LSB an MSB
+        msg = bytearray([self._CMD_INIT, self._CMD_SHIFT_STRIP_CHART, combined])
         self.send(msg)
 
     #9.2
@@ -927,11 +929,11 @@ class PyMoGlk:
         return 'Restart display to ensure FS integrity'
 
     #12.3
-    def delete_file(self, type, ref):
+    def delete_file(self, nature, ref):
         # TODO: declare custom exceptions
-        if not 0 <= type <= 1:
-           raise Exception
-        msg = bytearray([self._CMD_INIT, self._CMD_DELETE_FILE, type, ref])
+        if not 0 <= nature <= 1:
+            raise Exception
+        msg = bytearray([self._CMD_INIT, self._CMD_DELETE_FILE, nature, ref])
         self.send(msg)
         return 'Restart display to ensure FS integrity'
 
@@ -954,11 +956,11 @@ class PyMoGlk:
         self.send(msg)
 
     #12.7
-    def download_file(self, type, ref):
+    def download_file(self, nature, ref):
         # TODO: declare custom exceptions
-        if not 0 <= type <= 1:
+        if not 0 <= nature <= 1:
             raise Exception
-        msg = bytearray([self._CMD_INIT, self._CMD_DOWNLOAD_FILE, type, ref])
+        msg = bytearray([self._CMD_INIT, self._CMD_DOWNLOAD_FILE, nature, ref])
         self.send(msg)
         # TODO: handle file downloaad
         size = self.read(self._RET_LENGTH_FILE_SIZE)
@@ -1015,7 +1017,8 @@ class PyMoGlk:
             version = self._parse_version(version)
         return version
 
-    def _parse_version(self, version):
+    @staticmethod
+    def _parse_version(version):
         hexversion = str(hexlify(version))
         return "v" + hexversion[2] + "." + hexversion[3]
 
@@ -1029,7 +1032,7 @@ class PyMoGlk:
         else:
             return lcdtype
 
-    def _parse_type(self, type):
+    def _parse_type(self, nature):
         lcdinfos = {
             self._RET_LCD0821: {
                 'name': 'LCD0821',
@@ -1277,7 +1280,7 @@ class PyMoGlk:
                 'hsize': 240,
                 'vsize': 128,
             },
-        }.get(int.from_bytes(type, 'big'))
+        }.get(int.from_bytes(nature, 'big'))
 
         if self._DEBUG:
             print("DEBUG: type infos")
