@@ -364,12 +364,12 @@ class PyMoGlk:
 
     # FREE SPACE RETURN FORMAT
     # Free space size (4 bytes LSB to MSB)
+    _RET_LENGTH_FREE_SPACE = 4
 
     _CMD_DIRECTORY = int(0xB3)
 
     # DIRECTORY RETURN FORMAT
     #  Header (1 byte)
-    #    Number of entries (1 byte)1 byte)
     #    Number of entries (1 byte)
     #  File Entry (4 bytes)
     #    Flag (1 byte)
@@ -379,6 +379,7 @@ class PyMoGlk:
     #    Next seven bits: FileID)
     #    File size LSB (1 byte)
     #    File size MSB (1 byte)
+    _RET_LENGTH_DIRECTORY = 5
 
     _CMD_UPLOAD_FS = int(0xB0)
     #                    fsimagefile
@@ -404,6 +405,7 @@ class PyMoGlk:
     #  File size (4 bytes)
     #  (LSB to MSB)
     #  File Data
+    _RET_LENGTH_FILE_SIZE = 4
 
     # Undocumented command! Seems to dump the settings.
     _CMD_DUMP_SETTINGS = int(0xD0)
@@ -432,7 +434,7 @@ class PyMoGlk:
     #                     6:    Command,
     #                     7:    Display)
 
-    # FI\XME: Report it missing from codes list
+    # FIXME: Report it missing from codes list
     _CMD_WRITE_CUSTOMER_DATA = int(0x34)
     #                    data
     #                    (16B are accessible)
@@ -440,6 +442,7 @@ class PyMoGlk:
 
     #  READ_CUSTOMER_DATA RETURN FORMAT
     #  Data (16 bytes)
+    _RET_LENGTH_CUSTOMER_DATA = 16
 
     ## MISC
     _CMD_VERSION_NUMBER = int(0x36)
@@ -450,12 +453,14 @@ class PyMoGlk:
     #   Hex  Version
     #   int(0x19)  1.9
     #   int(0x57)  5.7)
+    _RET_LENGTH_VERSION_NUMBER = 1
 
     _CMD_MODULE_TYPE = int(0x37)
 
     #  MODULE_TYPE RETURN FORMAT
     #  Type (1 byte)
     #  (One of the following return codes)
+    _RET_LENGTH_MODULE_TYPE = 1
     _RET_LCD0821 = int(0x01)
     _RET_LCD2021 = int(0x02)
     _RET_LCD2041 = int(0x05)
@@ -934,13 +939,14 @@ class PyMoGlk:
     def get_fs_space(self):
         msg = bytearray([self._CMD_INIT, self._CMD_FREE_SPACE])
         self.send(msg)
-        return self.read(4)
+        return self.read(self._RET_LENGTH_FREE_SPACE)
 
     #12.5
     def get_fs_dir(self):
         msg = bytearray([self._CMD_INIT, self._CMD_DIRECTORY])
         self.send(msg)
-        return self.read()
+        # TODO: parse result
+        return self.read(self._RET_LENGTH_DIRECTORY)
 
     #12.6
     def upload_fs(self, data):
@@ -954,7 +960,9 @@ class PyMoGlk:
             raise Exception
         msg = bytearray([self._CMD_INIT, self._CMD_DOWNLOAD_FILE, type, ref])
         self.send(msg)
-        return self.read(4)
+        # TODO: handle file downloaad
+        size = self.read(self._RET_LENGTH_FILE_SIZE)
+        return NotImplemented
 
     #12.8
     def move_file(self, oldtype, oldref, newtype, newref):
@@ -983,7 +991,9 @@ class PyMoGlk:
     def dump_fs(self):
         msg = bytearray([self._CMD_INIT, self._CMD_DUMP_FS])
         self.send(msg)
-        return self.read(4)
+        # TODO: handle file downloaad
+        size = self.read(self._RET_LENGTH_FILE_SIZE)
+        return NotImplemented
 
     #13.6
     def write_customerdata(self, data):
@@ -994,13 +1004,13 @@ class PyMoGlk:
     def read_customerdata(self):
         msg = bytearray([self._CMD_INIT, self._CMD_READ_CUSTOMER_DATA])
         self.send(msg)
-        return self.read(16)
+        return self.read(self._RET_LENGTH_CUSTOMER_DATA)
 
     #14.2
     def read_version(self, parse=True):
         msg = bytearray([self._CMD_INIT, self._CMD_VERSION_NUMBER])
         self.send(msg)
-        version = self.read()
+        version = self.read(self._RET_LENGTH_VERSION_NUMBER)
         if parse:
             version = self._parse_version(version)
         return version
@@ -1013,7 +1023,7 @@ class PyMoGlk:
     def read_type(self, parse=True):
         msg = bytearray([self._CMD_INIT, self._CMD_MODULE_TYPE])
         self.send(msg)
-        lcdtype = self.read()
+        lcdtype = self.read(self._RET_LENGTH_MODULE_TYPE)
         if parse:
             return self._parse_type(lcdtype)
         else:
