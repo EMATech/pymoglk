@@ -44,6 +44,7 @@
 ## GENERAL COMMENTS
 # Coordinates are always absolute from the top left corner
 # Display is 192x64 so legal values are x[0-191] y[0-63]
+import time
 
 import serial
 from binascii import hexlify
@@ -551,6 +552,18 @@ class PyMoGlk:
     def __del__(self):
         self.port.close()
 
+    def _reconnect(self, baudrate=None, xonxoff=None):
+        # TODO: I2C support
+        self.port.close()
+
+        if baudrate:
+            self.port.baudrate = baudrate
+        if xonxoff:
+            self.port.xonxoff = xonxoff
+
+        time.sleep(.1)
+        self.port.open()
+
     def write(self, text):
         if self._DEBUG:
             print("DEBUG: write(" + text + ")")
@@ -563,6 +576,13 @@ class PyMoGlk:
 
     def read(self, size=1):
         data = self.port.read(size=size)
+
+        # Flow control
+        if self._RET_ALMOST_FULL in data:
+            self.port.set_output_flow_control(False)
+        if self._RET_ALMOST_EMPTY in data:
+            self.port.set_output_flow_control(True)
+
         if self._DEBUG:
             print("DEBUG: read(" + str(size) + ") = " + str(hexlify(data)) + "")
         return data
@@ -576,6 +596,7 @@ class PyMoGlk:
             raise Exception
         msg = bytearray([self._CMD_INIT, self._CMD_FLOW_CONTROL_ON, full, empty])
         self.send(msg)
+        self._reconnect(xonxoff=True)
 
     # 4.3
     def turn_flow_control_off(self):
@@ -584,6 +605,7 @@ class PyMoGlk:
             raise Exception
         msg = bytearray([self._CMD_INIT, self._CMD_FLOW_CONTROL_OFF])
         self.send(msg)
+        self._reconnect(xonxoff=False)
 
     def set_flow_control(self, state=False):
         if state:
@@ -598,6 +620,7 @@ class PyMoGlk:
             raise Exception
         msg = bytearray([self._CMD_INIT, self._CMD_I2C_ADDRESS, adr])
         self.send(msg)
+        self._reconnect()
 
     # 4.5
     def set_baud_rate(self, speed=_BAUD_RATE_19200):
@@ -606,6 +629,7 @@ class PyMoGlk:
             raise Exception
         msg = bytearray([self._CMD_INIT, self._CMD_BAUD_RATE, speed])
         self.send(msg)
+        self._reconnect(baudrate=speed)
 
     # 4.6
     def set_non_standard_baud_rate(self, speed):
@@ -616,6 +640,7 @@ class PyMoGlk:
         raise NotImplementedError
         msg = bytearray([self._CMD_INIT, self._CMD_BAUD_RATE, lsb, msb])
         self.send(msg)
+        self._reconnect(baudrate=speed)
 
     #5.2
     def upload_font(self, ref, data):
